@@ -180,7 +180,7 @@ open class LUAutocompleteView: UIView {
         perform(#selector(getElements), with: nil, afterDelay: throttleTime)
     }
 
-    @objc private func getElements() {
+    @objc public func getElements() {
         guard let dataSource = dataSource else {
             return
         }
