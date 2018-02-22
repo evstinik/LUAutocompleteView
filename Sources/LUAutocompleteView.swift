@@ -42,6 +42,7 @@ open class LUAutocompleteView: UIView {
             textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
             textField.addTarget(self, action: #selector(textFieldEditingEnded), for: .editingDidEnd)
             textField.addTarget(self, action: #selector(textFieldEditingBegin), for: .editingDidBegin)
+            tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
 
             setupConstraints()
         }
