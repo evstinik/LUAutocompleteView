@@ -41,6 +41,7 @@ open class LUAutocompleteView: UIView {
 
             textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
             textField.addTarget(self, action: #selector(textFieldEditingEnded), for: .editingDidEnd)
+            textField.addTarget(self, action: #selector(textFieldEditingBegin), for: .editingDidBegin)
 
             setupConstraints()
         }
@@ -173,6 +174,11 @@ open class LUAutocompleteView: UIView {
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(getElements), object: nil)
         perform(#selector(getElements), with: nil, afterDelay: throttleTime)
     }
+    
+    @objc private func textFieldEditingBegin() {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(getElements), object: nil)
+        perform(#selector(getElements), with: nil, afterDelay: throttleTime)
+    }
 
     @objc private func getElements() {
         guard let dataSource = dataSource else {
@@ -207,7 +213,8 @@ extension LUAutocompleteView: UITableViewDataSource {
     - Returns: The number of rows in `section`.
     */
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return !(textField?.text?.isEmpty ?? true) ? elements.count : 0
+        let nonEmpty = (textField?.text?.isEmpty == false) || shouldRequestElementsForEmptyText
+        return nonEmpty ? elements.count : 0
     }
 
     /** Asks the data source for a cell to insert in a particular location of the table view.
