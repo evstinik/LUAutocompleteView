@@ -24,6 +24,9 @@ open class LUAutocompleteView: UIView {
     public var maximumHeight: CGFloat = 200.0
     /// A boolean value that determines whether the view should hide after a suggestion is selected. Default value is `true`.
     public var shouldHideAfterSelecting = true
+    /// If should request for suggestions even if text is empty
+    public var shouldRequestElementsForEmptyText = false
+    
     /** The attributes for the text suggestions.
      
     - Note: This property will be ignored if `autocompleteCell` is not `nil`.
@@ -176,10 +179,11 @@ open class LUAutocompleteView: UIView {
             return
         }
 
-        guard let text = textField?.text, !text.isEmpty else {
+        guard (textField?.text?.isEmpty == false || shouldRequestElementsForEmptyText) else {
             elements.removeAll()
             return
         }
+        let text = textField?.text ?? ""
 
         dataSource.autocompleteView(self, elementsFor: text) { [weak self] elements in
             self?.elements = elements
